@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: chatcart-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: chatcart
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: chatcart-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=chatcart
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - JWT_SECRET=dGhpcy1pcy1hLXZlcnktc2VjdXJlLWFuZC1sb25nLWp3dC1zZWNyZXQta2V5LXRvLXVzZS1mb3ItY2hhdGNhcnQtYXBwLWxpdmU=
+      - META_ACCESS_TOKEN=mock
+      - META_PHONE_NUMBER_ID=mock_phone_id
+      - META_WEBHOOK_VERIFY_TOKEN=chatcart_verify_token
+      - RAZORPAY_KEY_ID=rzp_test_mock_id
+      - RAZORPAY_KEY_SECRET=rzp_test_mock_secret
+    volumes:
+      - backend_uploads:/app/uploads
+
+volumes:
+  postgres_data:
+  backend_uploads:
