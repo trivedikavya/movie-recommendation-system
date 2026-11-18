@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0b0b0f;
+  --surface: #14141b;
+  --border-color: #23232d;
+  --text: #f2f2f5;
+  --muted: #9a9aa8;
+  --accent: #e5484d;
+  --accent-hover: #ff6369;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-border-color: var(--border-color);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Horizontally scrolling rows with no visible scrollbar, Netflix-style. */
+.scroll-row {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  padding-bottom: 0.25rem;
+}
+.scroll-row::-webkit-scrollbar {
+  display: none;
+}

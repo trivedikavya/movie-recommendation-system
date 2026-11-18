@@ -1,0 +1,42 @@
+// Prisma schema for the movie recommender web app.
+// Two tables only, matching the original design:
+//   User          - account info, hashed password, chosen genres at signup
+//   Interaction   - every click/like/rating a user makes, used to build
+//                   their taste profile for personalised recommendations
+
+// Uses the Neon serverless driver adapter (HTTP/WebSocket over port 443)
+// instead of a raw TCP connection. This is Neon's own recommended setup
+// for serverless deployments like Vercel -- it avoids exhausting Postgres'
+// connection limit when many short-lived serverless functions run at once.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String        @id @default(cuid())
+  name           String
+  username       String        @unique
+  passwordHash   String
+  isGuest        Boolean       @default(false)
+  favoriteGenres String[]      @default([]) // picked once at onboarding, used for cold-start
+  createdAt      DateTime      @default(now())
+  interactions   Interaction[]
+}
+
+model Interaction {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movieId   Int // refers to a movieId in web/model-data/movies.json, not a DB foreign key
+  action    String // "click" | "like" | "rating"
+  weight    Float // click = 1, like = 3, rating = the 1-5 rating value
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, movieId])
+}
