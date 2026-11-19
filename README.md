@@ -1,7 +1,6 @@
 # Movie Recommendation System — Data Mining & Warehousing Project
 
 **Student:** Kavya Trivedi | **Roll No.:** 1157 | **Semester:** VII (B.Tech CSE)
-**Subject:** Data Mining and Warehousing (BTECHCSE230703)
 
 ## Dataset
 
