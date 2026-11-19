@@ -1,4 +1,5 @@
 # Movie Recommendation System Data Mining & Warehousing Project
+I built a movie recommendation system in two parts. First, in a Python notebook, I took the MovieLens dataset of 100,000+ ratings and mined it using six different techniques a popularity baseline, item-based collaborative filtering, k-means clustering on movie content, Apriori and FP Growth association rule mining, and classification with Decision Tree and Naive Bayes then combined the best signals into a Hybrid model, which I evaluated properly using a held out test set and standard ranking metrics. Second, I deployed that trained model into a live Next.js web application with real user accounts, where recommendations actually update based on what a user watches, likes, and rates.
 
 **Student:** Kavya Trivedi | **Roll No.:** 1157 | **Semester:** VII (B.Tech CSE)
 
