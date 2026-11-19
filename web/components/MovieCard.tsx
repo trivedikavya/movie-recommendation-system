@@ -12,6 +12,11 @@ export type MovieCardData = {
   year: number | null;
   genres: string[];
   reason?: string;
+  /** Whether the current user already liked this movie (so the button
+   * shows "Liked" immediately instead of resetting to blank). */
+  userLiked?: boolean;
+  /** The current user's saved rating for this movie, if any (0 = none). */
+  userRating?: number;
 };
 
 export default function MovieCard({ movie }: { movie: MovieCardData }) {
@@ -46,8 +51,8 @@ export default function MovieCard({ movie }: { movie: MovieCardData }) {
       )}
 
       <div className="mt-1.5 flex items-center justify-between gap-1">
-        <LikeButton onLike={handleLike} />
-        <RatingStars onRate={handleRate} />
+        <LikeButton initialLiked={movie.userLiked} onLike={handleLike} />
+        <RatingStars value={movie.userRating} onRate={handleRate} />
       </div>
     </div>
   );

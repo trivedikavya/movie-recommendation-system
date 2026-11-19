@@ -2,17 +2,28 @@
 - Local:         http://localhost:3000
 - Network:       http://192.168.31.94:3000
 - Environments: .env
-✓ Ready in 1830ms
-✓ Running next.config.ts took 161ms
+✓ Ready in 770ms
+✓ Running next.config.ts took 68ms
 [instrumentation] Local DNS fix for Neon applied.
 
- POST /api/auth/guest 200 in 2.7s (next.js: 293ms, proxy.ts: 166ms, application-code: 2.2s)
- GET /api/movies/search?q=Schindler's%20List 200 in 189ms (next.js: 104ms, proxy.ts: 31ms, application-code: 55ms)
- GET /api/movies/search?q=Dumb 200 in 36ms (next.js: 8ms, proxy.ts: 15ms, application-code: 12ms)
- GET /api/movies/search?q=Shawshank 200 in 45ms (next.js: 8ms, proxy.ts: 10ms, application-code: 28ms)
- GET /api/movies/search?q=Ace%20Ventura%3A%20Pet 200 in 52ms (next.js: 9ms, proxy.ts: 17ms, application-code: 26ms)
- POST /api/interactions 200 in 580ms (next.js: 184ms, proxy.ts: 21ms, application-code: 375ms)
- POST /api/interactions 200 in 317ms (next.js: 8ms, proxy.ts: 11ms, application-code: 297ms)
- POST /api/interactions 200 in 320ms (next.js: 8ms, proxy.ts: 13ms, application-code: 300ms)
- POST /api/interactions 200 in 388ms (next.js: 9ms, proxy.ts: 15ms, application-code: 364ms)
- GET /api/recommendations?type=for-you&n=10 200 in 825ms (next.js: 126ms, proxy.ts: 11ms, application-code: 689ms)
+ GET / 200 in 2.2s (next.js: 1353ms, proxy.ts: 262ms, application-code: 561ms)
+ GET /api/me 200 in 2.8s (next.js: 427ms, proxy.ts: 40ms, application-code: 2.3s)
+ GET /api/me 200 in 332ms (next.js: 10ms, proxy.ts: 17ms, application-code: 305ms)
+ GET /api/recommendations?type=popular 200 in 813ms (next.js: 171ms, proxy.ts: 29ms, application-code: 614ms)
+ GET /api/recommendations?type=popular 200 in 637ms (next.js: 10ms, proxy.ts: 13ms, application-code: 613ms)
+ GET /api/interactions 200 in 5.1s (next.js: 760ms, proxy.ts: 44ms, application-code: 4.3s)
+ GET /api/interactions 200 in 341ms (next.js: 19ms, proxy.ts: 28ms, application-code: 294ms)
+ GET /api/recommendations?type=for-you 200 in 4.3s (next.js: 197ms, proxy.ts: 33ms, application-code: 4.1s)
+ GET /api/recommendations?type=for-you 200 in 683ms (next.js: 23ms, proxy.ts: 49ms, application-code: 611ms)
+ GET /api/recommendations?type=because-liked 200 in 868ms (next.js: 21ms, proxy.ts: 12ms, application-code: 835ms)
+ GET /api/recommendations?type=because-liked 200 in 897ms (next.js: 11ms, proxy.ts: 18ms, application-code: 868ms)
+ POST /api/auth/guest 200 in 737ms (next.js: 215ms, proxy.ts: 11ms, application-code: 512ms)
+ GET /api/recommendations?type=for-you 200 in 749ms (next.js: 9ms, proxy.ts: 13ms, application-code: 728ms)
+ GET /api/recommendations?type=genre&genre=Drama 200 in 627ms (next.js: 11ms, proxy.ts: 14ms, application-code: 603ms)
+ GET /api/recommendations?type=genre&genre=Comedy 200 in 598ms (next.js: 8ms, proxy.ts: 14ms, application-code: 576ms)
+ GET /login 200 in 354ms (next.js: 174ms, proxy.ts: 14ms, application-code: 166ms)
+ POST /api/auth/guest 200 in 1318ms (next.js: 68ms, proxy.ts: 11ms, application-code: 1239ms)
+ POST /api/interactions 200 in 333ms (next.js: 25ms, proxy.ts: 12ms, application-code: 296ms)
+ POST /api/interactions 200 in 288ms (next.js: 4ms, proxy.ts: 5ms, application-code: 279ms)
+ POST /api/interactions 200 in 322ms (next.js: 11ms, proxy.ts: 14ms, application-code: 296ms)
+ GET /api/recommendations?type=for-you 200 in 612ms (next.js: 27ms, proxy.ts: 12ms, application-code: 572ms)

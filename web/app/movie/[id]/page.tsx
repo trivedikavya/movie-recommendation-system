@@ -9,6 +9,7 @@ import MovieRow from "@/components/MovieRow";
 import MoviePoster from "@/components/MoviePoster";
 import { apiGet, apiPost } from "@/lib/api-client";
 import type { MovieCardData } from "@/components/MovieCard";
+import { useInteractionState, withInteractionState } from "@/lib/use-interaction-state";
 
 type Me = { id: string; name: string; username: string };
 type Movie = { id: number; title: string; year: number | null; genres: string[] };
@@ -22,6 +23,7 @@ export default function MovieDetailPage({
   const [me, setMe] = useState<Me | null>(null);
   const [movie, setMovie] = useState<Movie | null>(null);
   const [similar, setSimilar] = useState<Movie[]>([]);
+  const interactionState = useInteractionState();
 
   useEffect(() => {
     apiGet<{ user: Me }>("/api/me").then((res) => setMe(res.user));
@@ -44,12 +46,15 @@ export default function MovieDetailPage({
     });
   }
 
-  const similarCards: MovieCardData[] = similar.map((m) => ({
-    movieId: m.id,
-    title: m.title,
-    year: m.year,
-    genres: m.genres,
-  }));
+  const similarCards: MovieCardData[] = withInteractionState(
+    similar.map((m) => ({
+      movieId: m.id,
+      title: m.title,
+      year: m.year,
+      genres: m.genres,
+    })),
+    interactionState
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -69,8 +74,15 @@ export default function MovieDetailPage({
               ))}
             </div>
             <div className="flex items-center gap-4">
-              <LikeButton onLike={handleLike} />
-              <RatingStars onRate={handleRate} size="md" />
+              <LikeButton
+                initialLiked={interactionState.likedIds.has(movie.id)}
+                onLike={handleLike}
+              />
+              <RatingStars
+                value={interactionState.ratings.get(movie.id) ?? 0}
+                onRate={handleRate}
+                size="md"
+              />
             </div>
           </div>
         </div>

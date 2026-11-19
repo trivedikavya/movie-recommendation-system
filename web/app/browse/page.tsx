@@ -5,6 +5,7 @@ import TopBar from "@/components/TopBar";
 import GenreChip from "@/components/GenreChip";
 import MovieCard, { type MovieCardData } from "@/components/MovieCard";
 import { apiGet } from "@/lib/api-client";
+import { useInteractionState, withInteractionState } from "@/lib/use-interaction-state";
 
 type Me = { id: string; name: string; username: string };
 type Movie = { id: number; title: string; year: number | null; genres: string[] };
@@ -15,6 +16,7 @@ export default function BrowsePage() {
   const [query, setQuery] = useState("");
   const [genreFilter, setGenreFilter] = useState<string | null>(null);
   const [movies, setMovies] = useState<Movie[]>([]);
+  const interactionState = useInteractionState();
 
   useEffect(() => {
     apiGet<{ user: Me }>("/api/me").then((res) => setMe(res.user));
@@ -35,12 +37,15 @@ export default function BrowsePage() {
 
   if (!me) return null;
 
-  const cards: MovieCardData[] = movies.map((m) => ({
-    movieId: m.id,
-    title: m.title,
-    year: m.year,
-    genres: m.genres,
-  }));
+  const cards: MovieCardData[] = withInteractionState(
+    movies.map((m) => ({
+      movieId: m.id,
+      title: m.title,
+      year: m.year,
+      genres: m.genres,
+    })),
+    interactionState
+  );
 
   return (
     <div className="min-h-screen bg-background">

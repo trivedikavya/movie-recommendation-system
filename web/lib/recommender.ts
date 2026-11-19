@@ -239,23 +239,34 @@ export function getPersonalizedRecommendations(
     .map(({ movie, score, reason }) => toRecommendation(movie, score, reason));
 }
 
+export type RecommendationMode = "cold-start" | "personalized";
+
 /**
  * Top-level entry point, mirroring the notebook's recommend(): decides
  * cold-start vs personalised based on how many distinct movies the user
- * has interacted with.
+ * has interacted with. Returns which mode was used alongside the
+ * recommendations, so the UI can show genre-browsing rows during
+ * cold-start and only switch to "Recommended for you" / "Because you
+ * liked X" language once real personalisation has kicked in.
  */
 export function getRecommendationsForUser(
   interactions: InteractionInput[],
   favoriteGenres: string[],
   n = 10
-): Recommendation[] {
+): { mode: RecommendationMode; recommendations: Recommendation[] } {
   const distinctMovieCount = new Set(interactions.map((i) => i.movieId)).size;
   const excludeIds = new Set(interactions.map((i) => i.movieId));
 
   if (distinctMovieCount < MIN_INTERACTIONS_FOR_PERSONALIZATION) {
-    return getColdStartRecommendations(favoriteGenres, excludeIds, n);
+    return {
+      mode: "cold-start",
+      recommendations: getColdStartRecommendations(favoriteGenres, excludeIds, n),
+    };
   }
-  return getPersonalizedRecommendations(interactions, n);
+  return {
+    mode: "personalized",
+    recommendations: getPersonalizedRecommendations(interactions, n),
+  };
 }
 
 /** Global "Popular right now" row -- same for every user, no personalisation. */
@@ -267,6 +278,25 @@ export function getPopularRecommendations(
     .filter((m) => !excludeIds.has(m.id))
     .slice(0, n)
     .map((m) => toRecommendation(m, getPopularityScore(m.id), "popular pick"));
+}
+
+/**
+ * Most popular movies within a single genre -- used for the cold-start
+ * "browse by genre" rows (e.g. a dedicated "Drama" row, a dedicated
+ * "Comedy" row) shown to brand-new users instead of a single, slightly
+ * dishonest "Recommended for you" row before there is any real behaviour
+ * to personalise from.
+ */
+export function getGenreRecommendations(
+  genre: string,
+  excludeIds: Set<number>,
+  n = 10
+): Recommendation[] {
+  const genreLower = genre.toLowerCase();
+  return getMoviesByPopularity()
+    .filter((m) => !excludeIds.has(m.id) && m.genres.some((g) => g.toLowerCase() === genreLower))
+    .slice(0, n)
+    .map((m) => toRecommendation(m, getPopularityScore(m.id), `popular in ${genre}`));
 }
 
 /**

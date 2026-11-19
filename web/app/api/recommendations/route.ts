@@ -5,9 +5,10 @@ import {
   getRecommendationsForUser,
   getPopularRecommendations,
   getBecauseYouLikedRow,
+  getGenreRecommendations,
 } from "@/lib/recommender";
 
-// GET /api/recommendations?type=for-you|popular|because-liked&n=10
+// GET /api/recommendations?type=for-you|popular|because-liked|genre&genre=Drama&n=10
 export async function GET(request: NextRequest) {
   const userId = await getCurrentUserId();
   if (!userId) {
@@ -37,6 +38,16 @@ export async function GET(request: NextRequest) {
     });
   }
 
+  if (type === "genre") {
+    const genre = searchParams.get("genre");
+    if (!genre) {
+      return NextResponse.json({ error: "Missing genre parameter" }, { status: 400 });
+    }
+    return NextResponse.json({
+      recommendations: getGenreRecommendations(genre, excludeIds, n),
+    });
+  }
+
   if (type === "because-liked") {
     // Key the row on the user's most recently liked movie, if any.
     const mostRecentLike = await prisma.interaction.findFirst({
@@ -57,7 +68,10 @@ export async function GET(request: NextRequest) {
     movieId: i.movieId,
     weight: i.weight,
   }));
-  return NextResponse.json({
-    recommendations: getRecommendationsForUser(interactionInputs, user.favoriteGenres, n),
-  });
+  const { mode, recommendations } = getRecommendationsForUser(
+    interactionInputs,
+    user.favoriteGenres,
+    n
+  );
+  return NextResponse.json({ mode, recommendations });
 }
